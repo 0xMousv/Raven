@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +7,26 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{--bg:#000;--panel:rgba(15,20,15,.85);--line:rgba(0,255,157,.12);--text:#f0fff4;--muted:#6b7a6f;--green:#00ff9d;--glow:rgba(0,255,157,.4);--red:#ff3d71;--yellow:#ffb800}
+[data-theme="light"]{--bg:#f0f4f0;--panel:rgba(255,255,255,.92);--line:rgba(0,150,80,.15);--text:#0a1a0f;--muted:#5a6b5f;--green:#00a85a;--glow:rgba(0,168,90,.25);--red:#c42050;--yellow:#b07800}
+[data-theme="light"] body::before{background-image:linear-gradient(rgba(0,150,80,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,150,80,.05) 1px,transparent 1px)}
+[data-theme="light"] nav{background:rgba(255,255,255,.88)}
+[data-theme="light"] .modal{background:#fff;border-color:rgba(0,150,80,.2)}
+[data-theme="light"] .input input{background:#f5f8f5;color:#0a1a0f;border-color:rgba(0,150,80,.15)}
+[data-theme="light"] .btn-google{background:#f5f5f5;border:1px solid #ddd;color:#333}
+[data-theme="light"] .plan-card{background:rgba(255,255,255,.97)}
+[data-theme="light"] .toast{background:rgba(255,255,255,.97);color:#0a1a0f}
+[data-theme="light"] .overlay{background:rgba(240,244,240,.93)}
+[data-theme="light"] .upload-area{background:rgba(0,150,80,.02)}
+[data-theme="light"] footer{color:#5a6b5f}
+[data-theme="light"] .tab-btn.active{color:#fff}
+[data-theme="light"] .user-pill{border-color:rgba(0,150,80,.25)}
+[data-theme="light"] .btn-outline{color:#5a6b5f}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 20% 15%,rgba(0,255,157,.08),transparent 35%),radial-gradient(circle at 80% 85%,rgba(0,255,157,.06),transparent 40%),var(--bg);font-family:'Inter',sans-serif;overflow-x:hidden}
+body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 20% 15%,rgba(0,255,157,.08),transparent 35%),radial-gradient(circle at 80% 85%,rgba(0,255,157,.06),transparent 40%),var(--bg);font-family:'Inter',sans-serif;overflow-x:hidden;transition:background .3s,color .3s}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:linear-gradient(rgba(0,255,157,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,157,.04) 1px,transparent 1px);background-size:50px 50px;animation:grid 25s linear infinite;z-index:-1}
 @keyframes grid{to{transform:translate(50px,50px)}}
-nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;z-index:100;border-bottom:1px solid var(--line);background:rgba(0,0,0,.8);backdrop-filter:blur(20px)}
+nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;z-index:100;border-bottom:1px solid var(--line);background:rgba(0,0,0,.8);backdrop-filter:blur(20px);transition:background .3s}
 .logo{font-weight:800;letter-spacing:3px;font-size:18px;color:var(--green);text-shadow:0 0 15px var(--glow);cursor:pointer;text-decoration:none}
 .nav-links{display:flex;gap:30px;align-items:center}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:.3s}
@@ -26,6 +41,8 @@ nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:cen
 .btn-google:hover{background:#f0f0f0}
 .btn-logout{background:rgba(255,61,113,.1);border:1px solid rgba(255,61,113,.25);color:var(--red);padding:6px 14px;font-size:11px}
 .btn-logout:hover{background:rgba(255,61,113,.2);border-color:var(--red)}
+.theme-toggle{background:none;border:1px solid var(--line);border-radius:8px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;font-size:16px;transition:.3s;color:var(--muted);padding:0}
+.theme-toggle:hover{border-color:var(--green);color:var(--green)}
 .hero{min-height:100vh;display:grid;place-items:center;padding:120px 6% 80px;text-align:center}
 .hero h1{font-size:clamp(48px,8vw,96px);line-height:.95;letter-spacing:-4px;margin-bottom:25px}
 .gradient{background:linear-gradient(90deg,var(--green),#00d4ff,var(--green));background-size:200% auto;-webkit-background-clip:text;color:transparent;animation:shift 4s ease infinite}
@@ -69,15 +86,32 @@ nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:cen
 footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:11px;letter-spacing:1px}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ✅ SESSION KICKED OVERLAY */
+.kicked-overlay{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:9999;display:none;place-items:center;text-align:center;padding:20px}
+.kicked-overlay.active{display:grid}
+.kicked-overlay h2{color:var(--red);font-size:24px;margin-bottom:10px}
+.kicked-overlay p{color:var(--muted);font-size:14px;max-width:400px;margin:0 auto 25px;line-height:1.7}
 </style>
 </head>
 <body>
+
+<!-- ✅ SESSION KICKED SCREEN -->
+<div class="kicked-overlay" id="kickedOverlay">
+    <div>
+        <div style="font-size:64px;margin-bottom:20px">🔒</div>
+        <h2>Session Terminated</h2>
+        <p>Your account was opened on another device. You have been signed out for security.</p>
+        <a href="index.html" class="btn btn-primary">Sign In Again</a>
+    </div>
+</div>
 
 <nav>
     <a class="logo" href="index.html">RAVEN</a>
     <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="my-account.html">My Account</a>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
         <div id="authArea"><button class="btn btn-outline" style="padding:8px 16px" onclick="openAuthModal()">Sign In / Register</button></div>
     </div>
 </nav>
@@ -86,10 +120,7 @@ footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-
     <div>
         <div class="badge"><span class="dot"></span> RECOVERY ENGINE v2.0</div>
         <h1>Recover.<br><span class="gradient">Restore.</span></h1>
-        <p style="color:var(--muted);max-width:600px;margin:0 auto 35px;line-height:1.8">
-            Advanced ransomware analysis and recovery platform.<br>
-            Sign in with Google or create an account, choose your plan, and get instant access.
-        </p>
+        <p style="color:var(--muted);max-width:600px;margin:0 auto 35px;line-height:1.8">Advanced ransomware analysis and recovery platform.<br>Sign in with Google or create an account, choose your plan, and get instant access.</p>
         <button class="btn btn-primary" onclick="document.getElementById('plans').scrollIntoView({behavior:'smooth'})">View Plans</button>
     </div>
 </section>
@@ -97,102 +128,19 @@ footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-
 <div id="plans" style="padding:80px 0">
     <h2 style="text-align:center;font-size:36px;letter-spacing:-2px">Choose Your Plan</h2>
     <div class="plans-grid">
-        <div class="plan-card" onclick="openCheckout('free')">
-            <h3>Free Trial</h3>
-            <div class="plan-price">$0 <span>/ 30 days</span></div>
-            <ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none">
-                <li>✓ Full access for 30 days</li><li>✓ Basic recovery tools</li><li>✗ Priority support</li><li>✗ Lifetime updates</li>
-            </ul>
-        </div>
-        <div class="plan-card" onclick="openCheckout('basic')">
-            <h3>Basic</h3>
-            <div class="plan-price">300 EGP <span>/ lifetime</span></div>
-            <ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none">
-                <li>✓ Full recovery suite</li><li>✓ Lifetime license key</li><li>✓ Email support</li><li>✗ Priority queue</li>
-            </ul>
-        </div>
-        <div class="plan-card" onclick="openCheckout('pro')" style="border-color:rgba(0,255,157,.3)">
-            <div style="position:absolute;top:0;right:0;background:var(--green);color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-bottom-left-radius:8px">POPULAR</div>
-            <h3>Pro Edition</h3>
-            <div class="plan-price">600 EGP <span>/ lifetime</span></div>
-            <ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none">
-                <li>✓ Everything in Basic</li><li>✓ Priority support 24/7</li><li>✓ Early access features</li><li>✓ Dedicated manager</li>
-            </ul>
-        </div>
+        <div class="plan-card" onclick="openCheckout('free')"><h3>Free Trial</h3><div class="plan-price">$0 <span>/ 30 days</span></div><ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none"><li>✓ Full access for 30 days</li><li>✓ Basic recovery tools</li><li>✗ Priority support</li><li>✗ Lifetime updates</li></ul></div>
+        <div class="plan-card" onclick="openCheckout('basic')"><h3>Basic</h3><div class="plan-price">300 EGP <span>/ lifetime</span></div><ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none"><li>✓ Full recovery suite</li><li>✓ Lifetime license key</li><li>✓ Email support</li><li>✗ Priority queue</li></ul></div>
+        <div class="plan-card" onclick="openCheckout('pro')" style="border-color:rgba(0,255,157,.3)"><div style="position:absolute;top:0;right:0;background:var(--green);color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-bottom-left-radius:8px">POPULAR</div><h3>Pro Edition</h3><div class="plan-price">600 EGP <span>/ lifetime</span></div><ul style="color:var(--muted);font-size:13px;line-height:2.2;list-style:none"><li>✓ Everything in Basic</li><li>✓ Priority support 24/7</li><li>✓ Early access features</li><li>✓ Dedicated manager</li></ul></div>
     </div>
 </div>
 
 <footer>RAVEN RECOVERY PLATFORM © 2026</footer>
 
-<!-- AUTH MODAL -->
-<div class="overlay" id="authOverlay">
-    <div class="modal">
-        <button class="close" onclick="closeAuthModal()">×</button>
-        <h2 style="margin-bottom:8px" id="authTitle">Welcome to RAVEN</h2>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Sign in or create your account</p>
-        
-        <div class="tab-btns">
-            <button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
-            <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
-        </div>
+<div class="overlay" id="authOverlay"><div class="modal"><button class="close" onclick="closeAuthModal()">×</button><h2 style="margin-bottom:8px">Welcome to RAVEN</h2><p style="color:var(--muted);font-size:13px;margin-bottom:20px">Sign in or create your account</p><div class="tab-btns"><button class="tab-btn active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button><button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')">Register</button></div><div id="loginForm"><div class="input"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div><div class="input"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"></div><button class="btn btn-primary" style="width:100%" id="loginBtn" onclick="emailLogin()">Sign In</button><div class="error-msg" id="loginErr"></div></div><div id="registerForm" style="display:none"><div class="input"><label>Username *</label><input type="text" id="regUser" placeholder="e.g. Ahmed_Gamer (min 3 chars)"></div><div class="input"><label>Email *</label><input type="email" id="regEmail" placeholder="you@example.com"></div><div class="input"><label>Password *</label><input type="password" id="regPass" placeholder="Min 6 characters"></div><button class="btn btn-primary" style="width:100%" id="regBtn" onclick="emailRegister()">Create Account</button><div class="error-msg" id="regErr"></div></div><div class="divider">OR</div><button class="btn btn-google" style="width:100%" onclick="googleSignIn()"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google</button></div></div>
 
-        <!-- LOGIN FORM -->
-        <div id="loginForm">
-            <div class="input"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
-            <div class="input"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••"></div>
-            <button class="btn btn-primary" style="width:100%" id="loginBtn" onclick="emailLogin()">Sign In</button>
-            <div class="error-msg" id="loginErr"></div>
-        </div>
+<div class="overlay" id="usernameOverlay"><div class="modal"><h2 style="margin-bottom:8px">Choose Your Username</h2><p style="color:var(--muted);font-size:13px;margin-bottom:25px">This will be your identity on RAVEN platform</p><div class="input"><label>Username *</label><input type="text" id="setupUser" placeholder="e.g. Ahmed_Gamer (min 3 chars)"></div><button class="btn btn-primary" style="width:100%" id="setupBtn" onclick="saveUsername()">Save Username</button><div class="error-msg" id="setupErr"></div></div></div>
 
-        <!-- REGISTER FORM -->
-        <div id="registerForm" style="display:none">
-            <div class="input"><label>Username *</label><input type="text" id="regUser" placeholder="e.g. Ahmed_Gamer (min 3 chars)"></div>
-            <div class="input"><label>Email *</label><input type="email" id="regEmail" placeholder="you@example.com"></div>
-            <div class="input"><label>Password *</label><input type="password" id="regPass" placeholder="Min 6 characters"></div>
-            <button class="btn btn-primary" style="width:100%" id="regBtn" onclick="emailRegister()">Create Account</button>
-            <div class="error-msg" id="regErr"></div>
-        </div>
-
-        <div class="divider">OR</div>
-        <button class="btn btn-google" style="width:100%" onclick="googleSignIn()">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-            Continue with Google
-        </button>
-    </div>
-</div>
-
-<!-- USERNAME SETUP MODAL -->
-<div class="overlay" id="usernameOverlay">
-    <div class="modal">
-        <h2 style="margin-bottom:8px">Choose Your Username</h2>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:25px">This will be your identity on RAVEN platform</p>
-        <div class="input"><label>Username *</label><input type="text" id="setupUser" placeholder="e.g. Ahmed_Gamer (min 3 chars)"></div>
-        <button class="btn btn-primary" style="width:100%" id="setupBtn" onclick="saveUsername()">Save Username</button>
-        <div class="error-msg" id="setupErr"></div>
-    </div>
-</div>
-
-<!-- CHECKOUT MODAL -->
-<div class="overlay" id="checkoutOverlay">
-    <div class="modal">
-        <button class="close" onclick="closeCheckout()">×</button>
-        <h2 style="margin-bottom:8px">Order: <span id="coPlanName" style="color:var(--green)"></span></h2>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:25px">Complete your order. Signed in as <span id="coEmail" style="color:var(--green)"></span></p>
-        <div class="input" id="coPhoneWrap" style="display:none"><label>Phone Number</label><input type="tel" id="coPhone" placeholder="01xxxxxxxxx"></div>
-        <div id="coPayInfo" style="display:none;background:rgba(0,255,157,.05);border:1px solid var(--line);border-radius:8px;padding:15px;margin-bottom:20px">
-            <p style="font-size:11px;color:var(--muted)">Transfer amount:</p>
-            <p style="font-size:20px;font-weight:800;color:var(--green)" id="coAmount"></p>
-            <p style="font-size:11px;color:var(--muted);margin-top:5px">To: <span style="color:#fff;font-family:'JetBrains Mono',monospace">01098944533</span></p>
-        </div>
-        <div class="input" id="coReceiptWrap" style="display:none">
-            <label>Payment Receipt Screenshot *</label>
-            <div class="upload-area" id="receiptArea" onclick="document.getElementById('receiptInput').click()"><span style="color:var(--muted);font-size:12px">📷 Click to upload payment screenshot</span></div>
-            <input type="file" id="receiptInput" accept="image/*" style="display:none" onchange="handleReceipt(this)">
-        </div>
-        <button class="btn btn-primary" style="width:100%" id="submitBtn" onclick="submitOrder()">Submit Request</button>
-        <div class="error-msg" id="coError"></div>
-    </div>
-</div>
+<div class="overlay" id="checkoutOverlay"><div class="modal"><button class="close" onclick="closeCheckout()">×</button><h2 style="margin-bottom:8px">Order: <span id="coPlanName" style="color:var(--green)"></span></h2><p style="color:var(--muted);font-size:13px;margin-bottom:25px">Complete your order. Signed in as <span id="coEmail" style="color:var(--green)"></span></p><div class="input" id="coPhoneWrap" style="display:none"><label>Phone Number</label><input type="tel" id="coPhone" placeholder="01xxxxxxxxx"></div><div id="coPayInfo" style="display:none;background:rgba(0,255,157,.05);border:1px solid var(--line);border-radius:8px;padding:15px;margin-bottom:20px"><p style="font-size:11px;color:var(--muted)">Transfer amount:</p><p style="font-size:20px;font-weight:800;color:var(--green)" id="coAmount"></p><p style="font-size:11px;color:var(--muted);margin-top:5px">To: <span style="color:#fff;font-family:'JetBrains Mono',monospace">01098944533</span></p></div><div class="input" id="coReceiptWrap" style="display:none"><label>Payment Receipt Screenshot *</label><div class="upload-area" id="receiptArea" onclick="document.getElementById('receiptInput').click()"><span style="color:var(--muted);font-size:12px">📷 Click to upload payment screenshot</span></div><input type="file" id="receiptInput" accept="image/*" style="display:none" onchange="handleReceipt(this)"></div><button class="btn btn-primary" style="width:100%" id="submitBtn" onclick="submitOrder()">Submit Request</button><div class="error-msg" id="coError"></div></div></div>
 
 <div class="toast-container" id="toasts"></div>
 
@@ -201,395 +149,240 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-// ============================================
 const CLOUDINARY_CLOUD_NAME = 'dhna8fguk';
 const CLOUDINARY_UPLOAD_PRESET = 'raven_unsigned';
 const ADMIN_EMAIL = 'mohamedgaming966@gmail.com';
-// ============================================
 
-const firebaseConfig = {
-    apiKey: "AIzaSyACA5xN8DE7Rcips935UKp0es3fznRDdB8",
-    authDomain: "nmnmmd-d81f8.firebaseapp.com",
-    projectId: "nmnmmd-d81f8",
-    storageBucket: "nmnmmd-d81f8.firebasestorage.app",
-    messagingSenderId: "673705420158",
-    appId: "1:673705420158:web:df5e8732e13a749b60bf2f"
-};
-
+const firebaseConfig = { apiKey:"AIzaSyACA5xN8DE7Rcips935UKp0es3fznRDdB8", authDomain:"nmnmmd-d81f8.firebaseapp.com", projectId:"nmnmmd-d81f8", storageBucket:"nmnmmd-d81f8.firebasestorage.app", messagingSenderId:"673705420158", appId:"1:673705420158:web:df5e8732e13a749b60bf2f" };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-const PRICES = { free: 0, basic: 300, pro: 600 };
-const NAMES = { free: 'Free Trial', basic: 'Basic', pro: 'Pro Edition' };
-let currentUser = null;
-let currentUsername = null;
-let currentRole = 'user';
-let selectedPlan = null;
-let receiptFile = null;
+const PRICES = { free:0, basic:300, pro:600 };
+const NAMES = { free:'Free Trial', basic:'Basic', pro:'Pro Edition' };
+let currentUser=null, currentUsername=null, currentRole='user', selectedPlan=null, receiptFile=null;
 
-// ✅ Cloudinary Upload
-async function uploadToCloudinary(file, folder) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', folder);
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, { method: 'POST', body: formData });
-    if (!res.ok) throw new Error((await res.json().catch(() => ({})))?.error?.message || 'Upload failed');
-    return (await res.json()).secure_url;
+// =============================================
+// ✅ SINGLE SESSION SYSTEM
+// =============================================
+let mySessionId = null;
+let sessionCheckInterval = null;
+
+function generateSessionId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
 
-// ✅ Toast Notification
-window.toast = function(msg, type = 'success') {
-    const t = document.createElement('div'); t.className = `toast ${type}`;
-    t.innerHTML = `<span>${type === 'success' ? '✓' : '⚠'}</span> ${msg}`;
-    document.getElementById('toasts').appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
-};
-
-// ✅ Check username AND role from Firestore
-async function checkUserProfile(uid) {
+async function startSessionGuard(uid) {
+    // Read my session ID from Firestore
     try {
         const snap = await getDoc(doc(db, 'users', uid));
-        if (snap.exists()) {
-            const data = snap.data();
-            return { username: data.username || null, role: data.role || 'user' };
-        }
-    } catch (e) { console.warn('checkUserProfile error:', e); }
-    return { username: null, role: 'user' };
+        if (snap.exists()) mySessionId = snap.data().sessionId || null;
+    } catch(e) {}
+
+    // Stop any existing interval
+    if (sessionCheckInterval) clearInterval(sessionCheckInterval);
+
+    // Check every 5 seconds if session was stolen
+    sessionCheckInterval = setInterval(async () => {
+        if (!currentUser) return;
+        try {
+            const snap = await getDoc(doc(db, 'users', currentUser.uid));
+            if (snap.exists()) {
+                const remoteSessionId = snap.data().sessionId;
+                if (remoteSessionId && mySessionId && remoteSessionId !== mySessionId) {
+                    // ✅ ANOTHER DEVICE LOGGED IN — kick this one
+                    clearInterval(sessionCheckInterval);
+                    sessionCheckInterval = null;
+                    mySessionId = null;
+                    try { await signOut(auth); } catch(e) {}
+                    document.getElementById('kickedOverlay').classList.add('active');
+                }
+            }
+        } catch(e) {}
+    }, 5000);
 }
 
-// ✅ Save user profile to Firestore (with role)
+function stopSessionGuard() {
+    if (sessionCheckInterval) { clearInterval(sessionCheckInterval); sessionCheckInterval = null; }
+    mySessionId = null;
+}
+
+// =============================================
+// ✅ CLOUDINARY + TOAST + HELPERS
+// =============================================
+async function uploadToCloudinary(file, folder) {
+    const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET); fd.append('folder', folder);
+    const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, { method:'POST', body:fd });
+    if (!r.ok) throw new Error((await r.json().catch(()=>({})))?.error?.message || 'Upload failed');
+    return (await r.json()).secure_url;
+}
+
+window.toast = function(msg, type='success') {
+    const t = document.createElement('div'); t.className = `toast ${type}`;
+    t.innerHTML = `<span>${type==='success'?'✓':'⚠'}</span> ${msg}`;
+    document.getElementById('toasts').appendChild(t);
+    setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 3500);
+};
+
+async function checkUserProfile(uid) {
+    try { const s = await getDoc(doc(db,'users',uid)); if(s.exists()) return { username: s.data().username||null, role: s.data().role||'user' }; } catch(e){} return { username:null, role:'user' };
+}
+
 async function saveUserProfile(uid, data) {
+    // ✅ Always generate new sessionId on save (login/register)
+    data.sessionId = generateSessionId();
+    data.lastActive = serverTimestamp();
     await setDoc(doc(db, 'users', uid), data, { merge: true });
+    return data.sessionId;
 }
 
-// ✅ Determine role: admin email gets 'admin', everyone else gets 'user'
-function determineRole(email) {
-    return email === ADMIN_EMAIL ? 'admin' : 'user';
-}
+function determineRole(email) { return email === ADMIN_EMAIL ? 'admin' : 'user'; }
 
-// ✅ Auth State Listener — with role + logout button
+// ✅ THEME
+function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('raven_theme', t); const b = document.getElementById('themeToggle'); if(b) b.textContent = t==='light'?'☀️':'🌙'; }
+window.toggleTheme = function() { const c = localStorage.getItem('raven_theme')||'dark'; applyTheme(c==='dark'?'light':'dark'); };
+applyTheme(localStorage.getItem('raven_theme')||'dark');
+
+// =============================================
+// ✅ AUTH STATE — with session guard
+// =============================================
 onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     const area = document.getElementById('authArea');
-    
+
     if (user) {
-        const profile = await checkUserProfile(user.uid);
-        currentUsername = profile.username;
-        currentRole = profile.role;
+        const p = await checkUserProfile(user.uid);
+        currentUsername = p.username; currentRole = p.role;
+        if (!currentUsername) document.getElementById('usernameOverlay').classList.add('active');
+        const rc = currentRole==='admin'?'role-admin':'role-user';
+        const rl = currentRole==='admin'?'ADMIN':'USER';
+        area.innerHTML = `<div style="display:flex;align-items:center;gap:10px"><div class="user-pill">${user.photoURL?`<img src="${user.photoURL}" alt="">`:''}<span>${currentUsername||user.displayName||'User'}</span><span class="role-badge ${rc}">${rl}</span></div><button class="btn btn-logout" onclick="doLogout()">Logout</button></div>`;
 
-        // If no username yet, show setup modal
-        if (!currentUsername) {
-            document.getElementById('usernameOverlay').classList.add('active');
-        }
-
-        // ✅ Build nav with username, role badge, and logout button
-        const roleClass = currentRole === 'admin' ? 'role-admin' : 'role-user';
-        const roleLabel = currentRole === 'admin' ? 'ADMIN' : 'USER';
-        
-        area.innerHTML = `
-            <div style="display:flex;align-items:center;gap:10px">
-                <div class="user-pill">
-                    ${user.photoURL ? `<img src="${user.photoURL}" alt="">` : ''}
-                    <span>${currentUsername || user.displayName || 'User'}</span>
-                    <span class="role-badge ${roleClass}">${roleLabel}</span>
-                </div>
-                <button class="btn btn-logout" onclick="doLogout()">Logout</button>
-            </div>
-        `;
+        // ✅ Start single session guard
+        startSessionGuard(user.uid);
     } else {
-        currentUsername = null;
-        currentRole = 'user';
+        currentUsername = null; currentRole = 'user';
+        stopSessionGuard();
         area.innerHTML = `<button class="btn btn-outline" style="padding:8px 16px" onclick="openAuthModal()">Sign In / Register</button>`;
     }
 });
 
-// ✅ Logout Function
+// ✅ LOGOUT — stop session guard
 window.doLogout = async () => {
-    try {
-        await signOut(auth);
-        toast('Logged out successfully', 'warning');
-    } catch (e) {
-        console.error('Logout error:', e);
-        toast('Logout failed', 'warning');
-    }
+    stopSessionGuard();
+    try { await signOut(auth); toast('Logged out','warning'); } catch(e){}
 };
 
 // =============================================
-// AUTH FUNCTIONS
+// ✅ AUTH FUNCTIONS
 // =============================================
-
-window.openAuthModal = () => {
-    clearAuthErrors();
-    document.getElementById('authOverlay').classList.add('active');
-};
-
-window.closeAuthModal = () => {
-    document.getElementById('authOverlay').classList.remove('active');
-    clearAuthErrors();
-};
-
+window.openAuthModal = () => { clearAuthErrors(); document.getElementById('authOverlay').classList.add('active'); };
+window.closeAuthModal = () => { document.getElementById('authOverlay').classList.remove('active'); clearAuthErrors(); };
 window.switchAuthTab = (tab) => {
     clearAuthErrors();
-    if (tab === 'login') {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('tabLogin').classList.add('active');
-        document.getElementById('tabRegister').classList.remove('active');
-    } else {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        document.getElementById('tabLogin').classList.remove('active');
-        document.getElementById('tabRegister').classList.add('active');
-    }
+    document.getElementById('loginForm').style.display = tab==='login'?'block':'none';
+    document.getElementById('registerForm').style.display = tab==='register'?'block':'none';
+    document.getElementById('tabLogin').classList.toggle('active', tab==='login');
+    document.getElementById('tabRegister').classList.toggle('active', tab==='register');
 };
+function clearAuthErrors() { ['loginErr','regErr','setupErr'].forEach(id => { const e=document.getElementById(id); if(e){e.style.display='none';e.textContent='';} }); }
 
-function clearAuthErrors() {
-    ['loginErr', 'regErr', 'setupErr'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.style.display = 'none'; el.textContent = ''; }
-    });
-}
-
-// ✅ Google Sign-In
 window.googleSignIn = async () => {
-    try {
-        await signInWithPopup(auth, provider);
-        closeAuthModal();
-        toast('Signed in with Google!');
-    } catch (e) {
-        console.error('Google sign-in error:', e);
-        toast(e.message, 'warning');
-    }
+    try { await signInWithPopup(auth, provider); closeAuthModal(); toast('Signed in with Google!'); } catch(e){ toast(e.message,'warning'); }
 };
 
-// ✅ Email Registration — saves role to Firestore
 window.emailRegister = async () => {
-    const user = document.getElementById('regUser').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pass = document.getElementById('regPass').value;
-    const err = document.getElementById('regErr');
-    const btn = document.getElementById('regBtn');
-
-    if (!user || user.length < 3) { 
-        err.textContent = 'Username must be at least 3 characters'; 
-        err.style.display = 'block'; return; 
-    }
-    if (!email || !email.includes('@') || !email.includes('.')) { 
-        err.textContent = 'Please enter a valid email address'; 
-        err.style.display = 'block'; return; 
-    }
-    if (!pass || pass.length < 6) { 
-        err.textContent = 'Password must be at least 6 characters'; 
-        err.style.display = 'block'; return; 
-    }
-
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-    err.style.display = 'none';
-
+    const u=document.getElementById('regUser').value.trim(), e=document.getElementById('regEmail').value.trim(), p=document.getElementById('regPass').value, err=document.getElementById('regErr'), btn=document.getElementById('regBtn');
+    if(!u||u.length<3){err.textContent='Username min 3 chars';err.style.display='block';return}
+    if(!e||!e.includes('@')){err.textContent='Valid email required';err.style.display='block';return}
+    if(!p||p.length<6){err.textContent='Password min 6 chars';err.style.display='block';return}
+    btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';err.style.display='none';
     try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        await updateProfile(cred.user, { displayName: user });
-        
-        // ✅ Save with role — admin email gets 'admin', others get 'user'
-        const role = determineRole(email);
-        
-        await saveUserProfile(cred.user.uid, {
-            uid: cred.user.uid,
-            username: user,
-            email: email,
-            photoURL: null,
-            role: role,
-            authProvider: 'email',
-            createdAt: serverTimestamp()
-        });
-        
-        closeAuthModal();
-        toast(`Welcome ${user}! Account created as ${role}.`);
-    } catch (e) {
-        console.error('Registration error:', e);
-        const errorMap = {
-            'auth/email-already-in-use': 'This email is already registered. Try signing in instead.',
-            'auth/invalid-email': 'Invalid email address format.',
-            'auth/weak-password': 'Password is too weak. Use at least 6 characters.',
-            'auth/operation-not-allowed': 'Email/password sign-up is NOT enabled in Firebase Console.',
-            'auth/network-request-failed': 'Network error. Disable AdBlocker.',
-            'auth/too-many-requests': 'Too many attempts. Wait and try again.',
-        };
-        err.textContent = errorMap[e.code] || e.message || 'Registration failed.';
-        err.style.display = 'block';
-    } finally { 
-        btn.disabled = false; btn.textContent = 'Create Account'; 
-    }
+        const c = await createUserWithEmailAndPassword(auth, e, p);
+        await updateProfile(c.user, { displayName: u });
+        // ✅ saveUserProfile generates sessionId automatically
+        await saveUserProfile(c.user.uid, { uid:c.user.uid, username:u, email:e, photoURL:null, role:determineRole(e), authProvider:'email', createdAt:serverTimestamp() });
+        closeAuthModal(); toast(`Welcome ${u}!`);
+    } catch(ex) {
+        const m = {'auth/email-already-in-use':'Email already registered.','auth/invalid-email':'Invalid email.','auth/weak-password':'Password too weak.','auth/operation-not-allowed':'Enable Email/Password in Firebase Console.','auth/network-request-failed':'Network error. Disable AdBlocker.','auth/too-many-requests':'Too many attempts.'};
+        err.textContent = m[ex.code]||ex.message||'Failed'; err.style.display='block';
+    } finally { btn.disabled=false; btn.textContent='Create Account'; }
 };
 
-// ✅ Email Login
 window.emailLogin = async () => {
-    const email = document.getElementById('loginEmail').value.trim();
-    const pass = document.getElementById('loginPass').value;
-    const err = document.getElementById('loginErr');
-    const btn = document.getElementById('loginBtn');
-
-    if (!email || !pass) { 
-        err.textContent = 'Email and password are required'; 
-        err.style.display = 'block'; return; 
-    }
-
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-    err.style.display = 'none';
-
+    const e=document.getElementById('loginEmail').value.trim(), p=document.getElementById('loginPass').value, err=document.getElementById('loginErr'), btn=document.getElementById('loginBtn');
+    if(!e||!p){err.textContent='Email and password required';err.style.display='block';return}
+    btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';err.style.display='none';
     try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        closeAuthModal();
-        toast('Welcome back!');
-    } catch (e) {
-        console.error('Login error:', e);
-        const errorMap = {
-            'auth/invalid-credential': 'Invalid email or password.',
-            'auth/user-not-found': 'No account found with this email.',
-            'auth/wrong-password': 'Incorrect password.',
-            'auth/invalid-email': 'Invalid email format.',
-            'auth/user-disabled': 'Account disabled.',
-            'auth/too-many-requests': 'Too many attempts. Wait and try again.',
-            'auth/network-request-failed': 'Network error. Disable AdBlocker.',
-            'auth/operation-not-allowed': 'Email/password sign-in NOT enabled in Firebase Console.',
-        };
-        err.textContent = errorMap[e.code] || e.message || 'Login failed.';
-        err.style.display = 'block';
-    } finally { 
-        btn.disabled = false; btn.textContent = 'Sign In'; 
-    }
+        await signInWithEmailAndPassword(auth, e, p);
+        // ✅ Update sessionId on login — kicks other devices
+        const sid = generateSessionId();
+        await setDoc(doc(db, 'users', auth.currentUser.uid), { sessionId: sid, lastActive: serverTimestamp() }, { merge: true });
+        mySessionId = sid;
+        closeAuthModal(); toast('Welcome back!');
+    } catch(ex) {
+        const m = {'auth/invalid-credential':'Invalid credentials.','auth/user-not-found':'No account found.','auth/wrong-password':'Wrong password.','auth/network-request-failed':'Network error.','auth/operation-not-allowed':'Enable Email/Password in Firebase Console.'};
+        err.textContent = m[ex.code]||ex.message||'Failed'; err.style.display='block';
+    } finally { btn.disabled=false; btn.textContent='Sign In'; }
 };
 
-// ✅ Username Setup — saves role too
 window.saveUsername = async () => {
-    const user = document.getElementById('setupUser').value.trim();
-    const err = document.getElementById('setupErr');
-    const btn = document.getElementById('setupBtn');
-
-    if (!user || user.length < 3) { 
-        err.textContent = 'Username must be at least 3 characters'; 
-        err.style.display = 'block'; return; 
-    }
-
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-    err.style.display = 'none';
-
+    const u=document.getElementById('setupUser').value.trim(), err=document.getElementById('setupErr'), btn=document.getElementById('setupBtn');
+    if(!u||u.length<3){err.textContent='Username min 3 chars';err.style.display='block';return}
+    btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';err.style.display='none';
     try {
-        await updateProfile(auth.currentUser, { displayName: user });
-        
-        const role = determineRole(auth.currentUser.email);
-        
-        await saveUserProfile(auth.currentUser.uid, {
-            uid: auth.currentUser.uid,
-            username: user,
-            email: auth.currentUser.email,
-            photoURL: auth.currentUser.photoURL,
-            role: role,
-            authProvider: auth.currentUser.providerData[0]?.providerId || 'unknown',
-            createdAt: serverTimestamp()
-        });
-        
+        await updateProfile(auth.currentUser, { displayName: u });
+        // ✅ saveUserProfile generates sessionId automatically
+        await saveUserProfile(auth.currentUser.uid, { uid:auth.currentUser.uid, username:u, email:auth.currentUser.email, photoURL:auth.currentUser.photoURL, role:determineRole(auth.currentUser.email), authProvider:auth.currentUser.providerData[0]?.providerId||'unknown', createdAt:serverTimestamp() });
         document.getElementById('usernameOverlay').classList.remove('active');
-        currentUsername = user;
-        currentRole = role;
-        toast(`Username saved! Role: ${role}`);
-    } catch (e) {
-        console.error('Save username error:', e);
-        err.textContent = e.message || 'Failed to save username'; 
-        err.style.display = 'block';
-    } finally { 
-        btn.disabled = false; btn.textContent = 'Save Username'; 
-    }
+        currentUsername = u; currentRole = determineRole(auth.currentUser.email);
+        toast('Username saved!');
+    } catch(ex) { err.textContent=ex.message||'Failed'; err.style.display='block'; }
+    finally { btn.disabled=false; btn.textContent='Save Username'; }
 };
 
 // =============================================
-// CHECKOUT FUNCTIONS
+// ✅ CHECKOUT
 // =============================================
-
 window.openCheckout = (plan) => {
-    if (!currentUser) { toast('Please sign in first', 'warning'); openAuthModal(); return; }
-    if (!currentUsername) { toast('Please set your username first', 'warning'); return; }
-    
-    selectedPlan = plan; receiptFile = null;
-    document.getElementById('coPlanName').textContent = NAMES[plan];
-    document.getElementById('coEmail').textContent = `${currentUsername} (${currentUser.email})`;
-    document.getElementById('coError').style.display = 'none';
-    document.getElementById('coPhone').value = '';
+    if(!currentUser){toast('Sign in first','warning');openAuthModal();return}
+    if(!currentUsername){toast('Set username first','warning');return}
+    selectedPlan=plan; receiptFile=null;
+    document.getElementById('coPlanName').textContent=NAMES[plan];
+    document.getElementById('coEmail').textContent=`${currentUsername} (${currentUser.email})`;
+    document.getElementById('coError').style.display='none'; document.getElementById('coPhone').value='';
     document.getElementById('receiptArea').classList.remove('has-file');
-    document.getElementById('receiptArea').querySelector('span').textContent = '📷 Click to upload payment screenshot';
-    document.getElementById('receiptInput').value = '';
-    
-    const paid = plan !== 'free';
-    document.getElementById('coPhoneWrap').style.display = paid ? 'block' : 'none';
-    document.getElementById('coPayInfo').style.display = paid ? 'block' : 'none';
-    document.getElementById('coReceiptWrap').style.display = paid ? 'block' : 'none';
-    if (paid) document.getElementById('coAmount').textContent = PRICES[plan] + ' EGP';
-    
+    document.getElementById('receiptArea').querySelector('span').textContent='📷 Click to upload payment screenshot';
+    document.getElementById('receiptInput').value='';
+    const paid=plan!=='free';
+    document.getElementById('coPhoneWrap').style.display=paid?'block':'none';
+    document.getElementById('coPayInfo').style.display=paid?'block':'none';
+    document.getElementById('coReceiptWrap').style.display=paid?'block':'none';
+    if(paid) document.getElementById('coAmount').textContent=PRICES[plan]+' EGP';
     document.getElementById('checkoutOverlay').classList.add('active');
 };
-
 window.closeCheckout = () => document.getElementById('checkoutOverlay').classList.remove('active');
-
-window.handleReceipt = (input) => {
-    const f = input.files[0]; if (!f) return;
-    receiptFile = f;
-    const area = document.getElementById('receiptArea');
-    area.classList.add('has-file');
-    area.querySelector('span').textContent = '✓ ' + f.name;
-};
+window.handleReceipt = (i) => { const f=i.files[0]; if(!f)return; receiptFile=f; const a=document.getElementById('receiptArea'); a.classList.add('has-file'); a.querySelector('span').textContent='✓ '+f.name; };
 
 window.submitOrder = async () => {
-    const err = document.getElementById('coError');
-    const btn = document.getElementById('submitBtn');
-    const phone = document.getElementById('coPhone').value.trim();
-    
-    if (!currentUser) { err.textContent = 'Session expired.'; err.style.display = 'block'; return; }
-    if (selectedPlan !== 'free' && !phone) { err.textContent = 'Phone number is required'; err.style.display = 'block'; return; }
-    if (selectedPlan !== 'free' && !receiptFile) { err.textContent = 'Payment receipt is required'; err.style.display = 'block'; return; }
-    
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Uploading...';
-    err.style.display = 'none';
-    
+    const err=document.getElementById('coError'), btn=document.getElementById('submitBtn'), phone=document.getElementById('coPhone').value.trim();
+    if(!currentUser){err.textContent='Session expired';err.style.display='block';return}
+    if(selectedPlan!=='free'&&!phone){err.textContent='Phone required';err.style.display='block';return}
+    if(selectedPlan!=='free'&&!receiptFile){err.textContent='Receipt required';err.style.display='block';return}
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Uploading...'; err.style.display='none';
     try {
-        let receiptUrl = null;
-        if (receiptFile) receiptUrl = await uploadToCloudinary(receiptFile, `raven/receipts/${currentUser.uid}`);
-        
-        btn.innerHTML = '<span class="spinner"></span> Saving...';
-        
-        await addDoc(collection(db, 'requests'), {
-            uid: currentUser.uid,
-            email: currentUser.email,
-            displayName: currentUsername || currentUser.displayName,
-            photoURL: currentUser.photoURL,
-            plan: selectedPlan,
-            phone: selectedPlan === 'free' ? '-' : phone,
-            amount: PRICES[selectedPlan],
-            status: 'pending',
-            receiptUrl, ravUrl: null, screenUrl: null,
-            createdAt: serverTimestamp()
-        });
-        
-        closeCheckout();
-        toast('Request submitted! Awaiting admin review.');
-    } catch (e) {
-        console.error('Submit error:', e);
-        err.textContent = e.message || 'Submission failed.'; 
-        err.style.display = 'block';
-        toast('Submission failed', 'warning');
-    } finally { 
-        btn.disabled = false; btn.textContent = 'Submit Request'; 
-    }
+        let ru=null; if(receiptFile) ru=await uploadToCloudinary(receiptFile, `raven/receipts/${currentUser.uid}`);
+        btn.innerHTML='<span class="spinner"></span> Saving...';
+        await addDoc(collection(db,'requests'), { uid:currentUser.uid, email:currentUser.email, displayName:currentUsername||currentUser.displayName, photoURL:currentUser.photoURL, plan:selectedPlan, phone:selectedPlan==='free'?'-':phone, amount:PRICES[selectedPlan], status:'pending', receiptUrl:ru, ravUrl:null, screenUrl:null, createdAt:serverTimestamp() });
+        closeCheckout(); toast('Request submitted!');
+    } catch(ex) { err.textContent=ex.message||'Failed'; err.style.display='block'; toast('Failed','warning'); }
+    finally { btn.disabled=false; btn.textContent='Submit Request'; }
 };
 
-// Close modals on outside click
-['authOverlay', 'checkoutOverlay', 'usernameOverlay'].forEach(id => {
+['authOverlay','checkoutOverlay','usernameOverlay'].forEach(id => {
     document.getElementById(id).addEventListener('click', e => {
-        if (e.target === document.getElementById(id) && id !== 'usernameOverlay') {
-            document.getElementById(id).classList.remove('active');
-        }
+        if(e.target===document.getElementById(id) && id!=='usernameOverlay') document.getElementById(id).classList.remove('active');
     });
 });
 </script>

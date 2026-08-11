@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +7,28 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{--bg:#000;--panel:rgba(15,20,15,.85);--line:rgba(0,255,157,.12);--text:#f0fff4;--muted:#6b7a6f;--green:#00ff9d;--glow:rgba(0,255,157,.4);--red:#ff3d71;--yellow:#ffb800}
+[data-theme="light"]{--bg:#f0f4f0;--panel:rgba(255,255,255,.92);--line:rgba(0,150,80,.15);--text:#0a1a0f;--muted:#5a6b5f;--green:#00a85a;--glow:rgba(0,168,90,.25);--red:#c42050;--yellow:#b07800}
+[data-theme="light"] body::before{background-image:linear-gradient(rgba(0,150,80,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,150,80,.05) 1px,transparent 1px)}
+[data-theme="light"] nav{background:rgba(255,255,255,.88)}
+[data-theme="light"] .modal{background:#fff;border-color:rgba(0,150,80,.2)}
+[data-theme="light"] .input input[type="text"],[data-theme="light"] .input input[type="url"],[data-theme="light"] .input input[type="email"],[data-theme="light"] .input input[type="password"]{background:#f5f8f5;color:#0a1a0f;border-color:rgba(0,150,80,.15)}
+[data-theme="light"] .stat{background:rgba(255,255,255,.97)}
+[data-theme="light"] .panel{background:rgba(255,255,255,.97)}
+[data-theme="light"] .current-version{background:rgba(0,150,80,.04)}
+[data-theme="light"] .toast{background:rgba(255,255,255,.97);color:#0a1a0f}
+[data-theme="light"] .overlay{background:rgba(240,244,240,.93)}
+[data-theme="light"] .login-wrap .modal{background:#fff}
+[data-theme="light"] table th{color:#5a6b5f}
+[data-theme="light"] tr:hover td{background:rgba(0,150,80,.04)}
+[data-theme="light"] .upload-area{background:rgba(0,150,80,.02)}
+[data-theme="light"] .free-notice{background:rgba(176,120,0,.06);border-color:rgba(176,120,0,.2)}
+[data-theme="light"] footer{color:#5a6b5f}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 20% 15%,rgba(0,255,157,.08),transparent 35%),radial-gradient(circle at 80% 85%,rgba(0,255,157,.06),transparent 40%),var(--bg);font-family:'Inter',sans-serif;overflow-x:hidden}
+body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 20% 15%,rgba(0,255,157,.08),transparent 35%),radial-gradient(circle at 80% 85%,rgba(0,255,157,.06),transparent 40%),var(--bg);font-family:'Inter',sans-serif;overflow-x:hidden;transition:background .3s,color .3s}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:linear-gradient(rgba(0,255,157,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,157,.04) 1px,transparent 1px);background-size:50px 50px;animation:grid 25s linear infinite;z-index:-1}
 @keyframes grid{to{transform:translate(50px,50px)}}
-nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;z-index:100;border-bottom:1px solid var(--line);background:rgba(0,0,0,.8);backdrop-filter:blur(20px)}
+nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;z-index:100;border-bottom:1px solid var(--line);background:rgba(0,0,0,.8);backdrop-filter:blur(20px);transition:background .3s}
 .logo{font-weight:800;letter-spacing:3px;font-size:18px;color:var(--green);text-shadow:0 0 15px var(--glow);text-decoration:none}
 .nav-links{display:flex;gap:30px;align-items:center}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:.3s}
@@ -22,6 +39,8 @@ nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:cen
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-outline{background:transparent;border:1px solid var(--line);color:var(--muted)}
 .btn-outline:hover{border-color:var(--green);color:var(--green)}
+.theme-toggle{background:none;border:1px solid var(--line);border-radius:8px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;font-size:16px;transition:.3s;color:var(--muted);padding:0}
+.theme-toggle:hover{border-color:var(--green);color:var(--green)}
 .container{max-width:1200px;margin:0 auto;padding:100px 6% 60px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
 .stat{background:var(--panel);border:1px solid var(--line);padding:25px;border-radius:14px}
@@ -82,61 +101,40 @@ footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-
     <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="my-account.html">My Account</a>
-        <a href="admin.html">Admin</a>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
     </div>
 </nav>
 
-<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
     <div class="modal" style="position:relative">
         <h2 style="margin-bottom:8px">Admin Authentication</h2>
         <p style="color:var(--muted);font-size:13px;margin-bottom:25px">Authorized: mohamedgaming966@gmail.com</p>
-        <div class="input"><label>Email</label><input type="email" id="admEmail" placeholder="admin@raven.local"></div>
+        <div class="input"><label>Email</label><input type="email" id="admEmail" placeholder="admin@raven.mousv"></div>
         <div class="input"><label>Password</label><input type="password" id="admPass" placeholder="••••••••"></div>
         <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Authenticate</button>
         <div class="error-msg" id="admErr">Invalid credentials</div>
     </div>
 </div>
 
-<!-- DASHBOARD -->
 <div class="container" id="dashWrap" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap;gap:15px">
         <div><h1 style="font-size:28px;letter-spacing:-1px">Admin Dashboard</h1><p style="color:var(--muted);font-size:13px;margin-top:5px">Manage program versions and user requests</p></div>
         <button class="btn btn-outline" onclick="logout()">Logout</button>
     </div>
-
-    <!-- PROGRAM VERSION MANAGER -->
     <div class="panel">
         <div class="panel-title"><h3>🔧 Program Version Manager</h3><span>GITHUB RELEASES</span></div>
-        <div class="current-version" id="currentVersionBox">
-            <div class="ver-icon">⬇</div>
-            <div class="ver-info" style="flex:1">
-                <h4 id="cvName">Loading...</h4>
-                <p id="cvMeta">Checking current version...</p>
-            </div>
-            <a id="cvLink" class="btn btn-outline" style="padding:8px 14px;font-size:11px;text-decoration:none" href="#" target="_blank">Preview Link</a>
-        </div>
-        <div class="input">
-            <label>Download URL (GitHub Releases link)</label>
-            <input type="url" id="progUrl" placeholder="https://github.com/0xMousv/RavenClint/releases/download/...">
-        </div>
-        <div class="input">
-            <label>Version Label (e.g. v1.0)</label>
-            <input type="text" id="progVersion" placeholder="v1.0">
-        </div>
+        <div class="current-version" id="currentVersionBox"><div class="ver-icon">⬇</div><div class="ver-info" style="flex:1"><h4 id="cvName">Loading...</h4><p id="cvMeta">Checking current version...</p></div><a id="cvLink" class="btn btn-outline" style="padding:8px 14px;font-size:11px;text-decoration:none" href="#" target="_blank">Preview Link</a></div>
+        <div class="input"><label>Download URL (GitHub Releases link)</label><input type="url" id="progUrl" placeholder="https://github.com/0xMousv/RavenClint/releases/download/..."></div>
+        <div class="input"><label>Version Label (e.g. v1.0)</label><input type="text" id="progVersion" placeholder="v1.0"></div>
         <button class="btn btn-primary" id="saveProgBtn" onclick="saveProgram()">Save & Update Version</button>
         <div class="error-msg" id="progErr"></div>
     </div>
-
-    <!-- REQUESTS STATS -->
     <div class="stats">
         <div class="stat"><small>Total Requests</small><strong class="green" id="stTotal">0</strong></div>
         <div class="stat"><small>Pending</small><strong class="yellow" id="stPending">0</strong></div>
         <div class="stat"><small>Approved</small><strong class="green" id="stApproved">0</strong></div>
         <div class="stat"><small>Revenue</small><strong class="green" id="stRevenue">0 EGP</strong></div>
     </div>
-
-    <!-- REQUESTS TABLE -->
     <div class="panel">
         <div class="panel-title"><h3>User Requests</h3><span>FIRESTORE + CLOUDINARY</span></div>
         <div style="overflow-x:auto"><table><thead><tr><th>User</th><th>Plan</th><th>Phone</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Action</th></tr></thead><tbody id="reqBody"></tbody></table></div>
@@ -144,37 +142,21 @@ footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-
     </div>
 </div>
 
-<!-- ✅ APPROVE MODAL - DYNAMIC BASED ON PLAN -->
 <div class="overlay" id="approveOverlay">
     <div class="modal">
         <button class="close" onclick="closeApprove()">×</button>
         <h2 style="margin-bottom:8px">Approve: <span id="apUser" style="color:var(--green)"></span> <span id="apPlanTag"></span></h2>
-        
-        <!-- ✅ Free plan notice - no RAV upload needed -->
-        <div id="freeNotice" class="free-notice" style="display:none">
-            <span>ℹ️</span>
-            <p>Free Trial plan — no .RAV file needed. Click approve to activate directly.</p>
-        </div>
-
-        <!-- ✅ Paid plan - RAV upload required -->
+        <div id="freeNotice" class="free-notice" style="display:none"><span>ℹ️</span><p>Free Trial — no .RAV file needed. Click approve to activate directly.</p></div>
         <div id="ravUploadSection" style="display:none">
             <p style="color:var(--muted);font-size:13px;margin-bottom:25px">Upload the .RAV rights file to Cloudinary to complete approval.</p>
-            <div class="input">
-                <label>Rights File (.rav) *</label>
-                <div class="upload-area" id="ravArea" onclick="document.getElementById('ravInput').click()"><span style="color:var(--muted);font-size:12px">Click to upload .rav file</span></div>
-                <input type="file" id="ravInput" accept=".rav" style="display:none" onchange="handleRavFile(this)">
-            </div>
+            <div class="input"><label>Rights File (.rav) *</label><div class="upload-area" id="ravArea" onclick="document.getElementById('ravInput').click()"><span style="color:var(--muted);font-size:12px">Click to upload .rav file</span></div><input type="file" id="ravInput" accept=".rav" style="display:none" onchange="handleRavFile(this)"></div>
         </div>
-
         <button class="btn btn-primary" style="width:100%;margin-top:10px" id="approveBtn" onclick="submitApproval()">Save & Approve</button>
         <div class="error-msg" id="apErr">Please upload the .RAV file first</div>
     </div>
 </div>
 
-<!-- RECEIPT PREVIEW -->
-<div class="overlay" id="receiptOverlay" onclick="this.classList.remove('active')">
-    <img id="receiptPreview" style="max-width:90vw;max-height:90vh;border-radius:12px;border:1px solid var(--line)">
-</div>
+<div class="overlay" id="receiptOverlay" onclick="this.classList.remove('active')"><img id="receiptPreview" style="max-width:90vw;max-height:90vh;border-radius:12px;border:1px solid var(--line)"></div>
 
 <footer>RAVEN ADMIN PANEL © 2026</footer>
 <div class="toast-container" id="toasts"></div>
@@ -183,268 +165,36 @@ footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-// ============================================
-const CLOUDINARY_CLOUD_NAME = 'dhna8fguk';
-const CLOUDINARY_UPLOAD_PRESET = 'raven_unsigned';
-// ============================================
+const CLOUDINARY_CLOUD_NAME='dhna8fguk',CLOUDINARY_UPLOAD_PRESET='raven_unsigned';
+const firebaseConfig={apiKey:"AIzaSyACA5xN8DE7Rcips935UKp0es3fznRDdB8",authDomain:"nmnmmd-d81f8.firebaseapp.com",projectId:"nmnmmd-d81f8",storageBucket:"nmnmmd-d81f8.firebasestorage.app",messagingSenderId:"673705420158",appId:"1:673705420158:web:df5e8732e13a749b60bf2f"};
+const app=initializeApp(firebaseConfig),db=getFirestore(app);
+let currentDocId=null,currentPlan=null,ravFile=null;
 
-const firebaseConfig = {
-    apiKey: "AIzaSyACA5xN8DE7Rcips935UKp0es3fznRDdB8",
-    authDomain: "nmnmmd-d81f8.firebaseapp.com",
-    projectId: "nmnmmd-d81f8",
-    storageBucket: "nmnmmd-d81f8.firebasestorage.app",
-    messagingSenderId: "673705420158",
-    appId: "1:673705420158:web:df5e8732e13a749b60bf2f"
-};
+async function uploadToCloudinary(file,folder){const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_UPLOAD_PRESET);fd.append('folder',folder);const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/raw/upload`,{method:'POST',body:fd});if(!r.ok)throw new Error((await r.json().catch(()=>({})))?.error?.message||`Upload failed (${r.status})`);return(await r.json()).secure_url}
+function toast(msg,type='success'){const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span>${type==='success'?'✓':'⚠'}</span> ${msg}`;document.getElementById('toasts').appendChild(t);setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300)},3500)}
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// ✅ THEME
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('raven_theme',t);const b=document.getElementById('themeToggle');if(b)b.textContent=t==='light'?'☀️':''}
+window.toggleTheme=function(){const c=localStorage.getItem('raven_theme')||'dark';applyTheme(c==='dark'?'light':'dark')};
+applyTheme(localStorage.getItem('raven_theme')||'dark');
 
-let currentDocId = null;
-let currentPlan = null;
-let ravFile = null;
+if(sessionStorage.getItem('raven_admin')==='true'){document.getElementById('loginWrap').style.display='none';document.getElementById('dashWrap').style.display='block';loadCurrentVersion();loadRequests()}
+window.adminLogin=function(){const e=document.getElementById('admEmail').value.trim();if(e==='mohamedgaming966@gmail.com'&&document.getElementById('admPass').value.length>0){sessionStorage.setItem('raven_admin','true');document.getElementById('loginWrap').style.display='none';document.getElementById('dashWrap').style.display='block';loadCurrentVersion();loadRequests();toast('Welcome to Admin Panel')}else{document.getElementById('admErr').style.display='block'}};
+window.logout=function(){sessionStorage.removeItem('raven_admin');location.reload()};
 
-// ✅ Cloudinary Upload (only for .RAV files)
-async function uploadToCloudinary(file, folder) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', folder);
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/raw/upload`, { method: 'POST', body: formData });
-    if (!res.ok) throw new Error((await res.json().catch(() => ({})))?.error?.message || `Upload failed (${res.status})`);
-    return (await res.json()).secure_url;
-}
+async function loadCurrentVersion(){try{const s=await getDoc(doc(db,'app_config','program'));if(s.exists()){const d=s.data();document.getElementById('cvName').textContent=d.version||'Unknown';document.getElementById('cvMeta').textContent=`Updated: ${d.updatedAt?.toDate?d.updatedAt.toDate().toLocaleString('en-GB'):'-'} • ${d.fileName||'-'}`;const l=document.getElementById('cvLink');l.href=d.url||'#';l.style.display=d.url?'inline-flex':'none'}else{document.getElementById('cvName').textContent='No version set yet';document.getElementById('cvMeta').textContent='Paste a GitHub Releases link below';document.getElementById('cvLink').style.display='none'}}catch(e){document.getElementById('cvName').textContent='Error loading version'}}
 
-function toast(msg, type = 'success') {
-    const t = document.createElement('div'); t.className = `toast ${type}`;
-    t.innerHTML = `<span>${type === 'success' ? '✓' : '⚠'}</span> ${msg}`;
-    document.getElementById('toasts').appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
-}
+window.saveProgram=async function(){const err=document.getElementById('progErr'),btn=document.getElementById('saveProgBtn'),url=document.getElementById('progUrl').value.trim(),ver=document.getElementById('progVersion').value.trim();if(!url){err.textContent='Enter download URL';err.style.display='block';return}if(!ver){err.textContent='Enter version label';err.style.display='block';return}btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Saving...';err.style.display='none';try{await setDoc(doc(db,'app_config','program'),{url,version:ver,fileName:url.split('/').pop()||'unknown',fileSize:0,updatedAt:new Date()});document.getElementById('progUrl').value='';document.getElementById('progVersion').value='';await loadCurrentVersion();toast(`Version ${ver} saved ✓`)}catch(e){err.textContent='Failed: '+e.message;err.style.display='block';toast('Failed','warning')}finally{btn.disabled=false;btn.textContent='Save & Update Version'}};
 
-// ✅ Auth Check
-if (sessionStorage.getItem('raven_admin') === 'true') {
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('dashWrap').style.display = 'block';
-    loadCurrentVersion();
-    loadRequests();
-}
+async function loadRequests(){try{const snap=await getDocs(collection(db,'requests')),reqs=[];snap.forEach(d=>reqs.push({id:d.id,...d.data()}));reqs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));document.getElementById('stTotal').textContent=reqs.length;document.getElementById('stPending').textContent=reqs.filter(r=>r.status==='pending').length;document.getElementById('stApproved').textContent=reqs.filter(r=>r.status==='approved').length;document.getElementById('stRevenue').textContent=reqs.reduce((s,r)=>s+(r.amount||0),0)+' EGP';const tb=document.getElementById('reqBody'),em=document.getElementById('emptyMsg');if(!reqs.length){tb.innerHTML='';em.style.display='block';return}em.style.display='none';tb.innerHTML=reqs.map(r=>{const ri=r.receiptUrl?`<img src="${r.receiptUrl}" class="receipt-thumb" onclick="previewReceipt('${r.receiptUrl}')" title="Preview">`:'<span style="color:var(--muted);font-size:11px">N/A</span>';const pc=r.plan==='pro'?'plan-pro':r.plan==='basic'?'plan-basic':'plan-free';return`<tr><td><div style="display:flex;align-items:center;gap:8px">${r.photoURL?`<img src="${r.photoURL}" style="width:24px;height:24px;border-radius:50%">`:''}<div><div style="font-weight:600">${r.displayName||'Unknown'}</div><div style="font-size:10px;color:var(--muted)">${r.email||''}</div></div></div></td><td><span class="plan-tag ${pc}">${r.plan}</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.phone}</td><td style="color:var(--green);font-weight:700">${r.amount>0?r.amount+' EGP':'-'}</td><td>${ri}</td><td><span class="badge badge-${r.status}">${r.status.toUpperCase()}</span></td><td>${r.status==='pending'?`<button class="btn btn-primary" style="padding:6px 14px;font-size:11px" onclick="openApprove('${r.id}','${(r.displayName||'User').replace(/'/g,"\\'")}','${r.plan}')">Approve</button>`:`<span style="color:var(--green);font-size:11px">✓ Done</span>`}</td></tr>`}).join('')}catch(e){toast('Failed to load requests','warning')}}
 
-window.adminLogin = function() {
-    const e = document.getElementById('admEmail').value.trim();
-    if (e === 'mohamedgaming966@gmail.com' && document.getElementById('admPass').value.length > 0) {
-        sessionStorage.setItem('raven_admin', 'true');
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('dashWrap').style.display = 'block';
-        loadCurrentVersion();
-        loadRequests();
-        toast('Welcome to Admin Panel');
-    } else {
-        document.getElementById('admErr').style.display = 'block';
-    }
-};
+window.previewReceipt=function(u){document.getElementById('receiptPreview').src=u;document.getElementById('receiptOverlay').classList.add('active')};
+window.openApprove=function(id,user,plan){currentDocId=id;currentPlan=plan;ravFile=null;document.getElementById('apUser').textContent=user;document.getElementById('apErr').style.display='none';const pc=plan==='pro'?'plan-pro':plan==='basic'?'plan-basic':'plan-free';document.getElementById('apPlanTag').innerHTML=`<span class="plan-tag ${pc}">${plan}</span>`;const isFree=plan==='free';document.getElementById('freeNotice').style.display=isFree?'flex':'none';document.getElementById('ravUploadSection').style.display=isFree?'none':'block';const a=document.getElementById('ravArea');a.classList.remove('has-file');a.querySelector('span').textContent='Click to upload .rav file';document.getElementById('ravInput').value='';document.getElementById('approveBtn').textContent=isFree?'Approve Free Trial':'Upload .RAV & Approve';document.getElementById('approveOverlay').classList.add('active')};
+window.closeApprove=function(){document.getElementById('approveOverlay').classList.remove('active');currentDocId=null;currentPlan=null};
+window.handleRavFile=function(i){const f=i.files[0];if(!f)return;ravFile=f;const a=document.getElementById('ravArea');a.classList.add('has-file');a.querySelector('span').textContent='✓ '+f.name};
 
-window.logout = function() { sessionStorage.removeItem('raven_admin'); location.reload(); };
-
-// =============================================
-// PROGRAM VERSION - URL ONLY
-// =============================================
-
-async function loadCurrentVersion() {
-    try {
-        const snap = await getDoc(doc(db, 'app_config', 'program'));
-        if (snap.exists()) {
-            const data = snap.data();
-            document.getElementById('cvName').textContent = data.version || 'Unknown Version';
-            document.getElementById('cvMeta').textContent = `Updated: ${data.updatedAt?.toDate ? data.updatedAt.toDate().toLocaleString('en-GB') : '-'} • ${data.fileName || '-'}`;
-            const link = document.getElementById('cvLink');
-            link.href = data.url || '#';
-            link.style.display = data.url ? 'inline-flex' : 'none';
-        } else {
-            document.getElementById('cvName').textContent = 'No version set yet';
-            document.getElementById('cvMeta').textContent = 'Paste a GitHub Releases link below';
-            document.getElementById('cvLink').style.display = 'none';
-        }
-    } catch (e) {
-        console.error('Load version error:', e);
-        document.getElementById('cvName').textContent = 'Error loading version';
-    }
-}
-
-window.saveProgram = async function() {
-    const err = document.getElementById('progErr');
-    const btn = document.getElementById('saveProgBtn');
-    const url = document.getElementById('progUrl').value.trim();
-    const version = document.getElementById('progVersion').value.trim();
-
-    if (!url) { err.textContent = 'Please enter the download URL'; err.style.display = 'block'; return; }
-    if (!version) { err.textContent = 'Please enter a version label (e.g. v1.0)'; err.style.display = 'block'; return; }
-
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
-    err.style.display = 'none';
-
-    try {
-        const fileName = url.split('/').pop() || 'unknown';
-        await setDoc(doc(db, 'app_config', 'program'), {
-            url, version, fileName, fileSize: 0, updatedAt: new Date()
-        });
-        document.getElementById('progUrl').value = '';
-        document.getElementById('progVersion').value = '';
-        await loadCurrentVersion();
-        toast(`Version ${version} saved successfully ✓`);
-    } catch (e) {
-        console.error('Save program error:', e);
-        err.textContent = 'Failed: ' + e.message; err.style.display = 'block';
-        toast('Failed to save', 'warning');
-    } finally {
-        btn.disabled = false; btn.textContent = 'Save & Update Version';
-    }
-};
-
-// =============================================
-// REQUESTS MANAGEMENT
-// =============================================
-
-async function loadRequests() {
-    try {
-        const snap = await getDocs(collection(db, 'requests'));
-        const reqs = [];
-        snap.forEach(d => reqs.push({ id: d.id, ...d.data() }));
-        reqs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-
-        document.getElementById('stTotal').textContent = reqs.length;
-        document.getElementById('stPending').textContent = reqs.filter(r => r.status === 'pending').length;
-        document.getElementById('stApproved').textContent = reqs.filter(r => r.status === 'approved').length;
-        document.getElementById('stRevenue').textContent = reqs.reduce((s, r) => s + (r.amount || 0), 0) + ' EGP';
-
-        const tbody = document.getElementById('reqBody');
-        const empty = document.getElementById('emptyMsg');
-
-        if (!reqs.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-        empty.style.display = 'none';
-
-        tbody.innerHTML = reqs.map(r => {
-            const receiptImg = r.receiptUrl
-                ? `<img src="${r.receiptUrl}" class="receipt-thumb" onclick="previewReceipt('${r.receiptUrl}')" title="Preview receipt">`
-                : '<span style="color:var(--muted);font-size:11px">N/A</span>';
-            
-            // ✅ Plan tag with color
-            const planClass = r.plan === 'pro' ? 'plan-pro' : r.plan === 'basic' ? 'plan-basic' : 'plan-free';
-            
-            return `<tr>
-                <td><div style="display:flex;align-items:center;gap:8px">${r.photoURL ? `<img src="${r.photoURL}" style="width:24px;height:24px;border-radius:50%">` : ''}<div><div style="font-weight:600">${r.displayName || 'Unknown'}</div><div style="font-size:10px;color:var(--muted)">${r.email || ''}</div></div></div></td>
-                <td><span class="plan-tag ${planClass}">${r.plan}</span></td>
-                <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.phone}</td>
-                <td style="color:var(--green);font-weight:700">${r.amount > 0 ? r.amount + ' EGP' : '-'}</td>
-                <td>${receiptImg}</td>
-                <td><span class="badge badge-${r.status}">${r.status.toUpperCase()}</span></td>
-                <td>${r.status === 'pending' ? `<button class="btn btn-primary" style="padding:6px 14px;font-size:11px" onclick="openApprove('${r.id}','${(r.displayName||'User').replace(/'/g,"\\'")}','${r.plan}')">Approve</button>` : `<span style="color:var(--green);font-size:11px">✓ Done</span>`}</td>
-            </tr>`;
-        }).join('');
-    } catch (e) {
-        console.error('Load requests error:', e);
-        toast('Failed to load requests', 'warning');
-    }
-}
-
-window.previewReceipt = function(url) {
-    document.getElementById('receiptPreview').src = url;
-    document.getElementById('receiptOverlay').classList.add('active');
-};
-
-// ✅ Open Approve Modal — checks plan to show/hide RAV upload
-window.openApprove = function(id, user, plan) {
-    currentDocId = id;
-    currentPlan = plan;
-    ravFile = null;
-
-    document.getElementById('apUser').textContent = user;
-    document.getElementById('apErr').style.display = 'none';
-
-    // ✅ Plan tag in modal title
-    const planClass = plan === 'pro' ? 'plan-pro' : plan === 'basic' ? 'plan-basic' : 'plan-free';
-    document.getElementById('apPlanTag').innerHTML = `<span class="plan-tag ${planClass}">${plan}</span>`;
-
-    // ✅ Show/hide based on plan
-    const isFree = plan === 'free';
-    document.getElementById('freeNotice').style.display = isFree ? 'flex' : 'none';
-    document.getElementById('ravUploadSection').style.display = isFree ? 'none' : 'block';
-
-    // Reset RAV upload area
-    const area = document.getElementById('ravArea');
-    area.classList.remove('has-file');
-    area.querySelector('span').textContent = 'Click to upload .rav file';
-    document.getElementById('ravInput').value = '';
-
-    // ✅ Change button text based on plan
-    document.getElementById('approveBtn').textContent = isFree ? 'Approve Free Trial' : 'Upload .RAV & Approve';
-
-    document.getElementById('approveOverlay').classList.add('active');
-};
-
-window.closeApprove = function() { document.getElementById('approveOverlay').classList.remove('active'); currentDocId = null; currentPlan = null; };
-
-window.handleRavFile = function(input) {
-    const f = input.files[0]; if (!f) return;
-    ravFile = f;
-    const area = document.getElementById('ravArea');
-    area.classList.add('has-file');
-    area.querySelector('span').textContent = '✓ ' + f.name;
-};
-
-// ✅ Submit Approval — Free = no RAV needed, Basic/Pro = RAV required
-window.submitApproval = async function() {
-    const err = document.getElementById('apErr');
-    const btn = document.getElementById('approveBtn');
-    const isFree = currentPlan === 'free';
-
-    // ✅ For paid plans, RAV file is required
-    if (!isFree && !ravFile) {
-        err.textContent = 'Please upload the .RAV file first';
-        err.style.display = 'block';
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = isFree ? '<span class="spinner"></span> Approving...' : '<span class="spinner"></span> Uploading...';
-    err.style.display = 'none';
-
-    try {
-        let ravUrl = null;
-
-        // ✅ Only upload RAV for paid plans
-        if (!isFree && ravFile) {
-            ravUrl = await uploadToCloudinary(ravFile, `raven/rav_files/${currentDocId}`);
-            btn.innerHTML = '<span class="spinner"></span> Updating...';
-        }
-
-        // ✅ Update Firestore — free has no ravUrl, paid has ravUrl
-        await updateDoc(doc(db, 'requests', currentDocId), {
-            status: 'approved',
-            ravUrl: ravUrl,
-            approvedAt: new Date()
-        });
-
-        closeApprove();
-        await loadRequests();
-
-        if (isFree) {
-            toast('Free Trial approved! No .RAV file needed ✓');
-        } else {
-            toast('Approved! .RAV uploaded to Cloudinary ✓');
-        }
-    } catch (e) {
-        console.error('Approval error:', e);
-        err.textContent = 'Failed: ' + e.message;
-        err.style.display = 'block';
-        toast('Error', 'warning');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = isFree ? 'Approve Free Trial' : 'Upload .RAV & Approve';
-    }
-};
-
-document.getElementById('approveOverlay').addEventListener('click', e => { if (e.target === document.getElementById('approveOverlay')) closeApprove(); });
+window.submitApproval=async function(){const err=document.getElementById('apErr'),btn=document.getElementById('approveBtn'),isFree=currentPlan==='free';if(!isFree&&!ravFile){err.textContent='Upload .RAV file first';err.style.display='block';return}btn.disabled=true;btn.innerHTML=isFree?'<span class="spinner"></span> Approving...':'<span class="spinner"></span> Uploading...';err.style.display='none';try{let ru=null;if(!isFree&&ravFile){ru=await uploadToCloudinary(ravFile,`raven/rav_files/${currentDocId}`);btn.innerHTML='<span class="spinner"></span> Updating...'}await updateDoc(doc(db,'requests',currentDocId),{status:'approved',ravUrl:ru,approvedAt:new Date()});closeApprove();await loadRequests();toast(isFree?'Free Trial approved ✓':'Approved! .RAV uploaded ✓')}catch(e){err.textContent='Failed: '+e.message;err.style.display='block';toast('Error','warning')}finally{btn.disabled=false;btn.textContent=isFree?'Approve Free Trial':'Upload .RAV & Approve'}};
+document.getElementById('approveOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('approveOverlay'))closeApprove()});
 </script>
 </body>
 </html>

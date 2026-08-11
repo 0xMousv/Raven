@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVEN // My Account</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#000;--panel:rgba(15,20,15,.85);--line:rgba(0,255,157,.12);--text:#f0fff4;--muted:#6b7a6f;--green:#00ff9d;--glow:rgba(0,255,157,.4);--red:#ff3d71;--yellow:#ffb800}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 20% 15%,rgba(0,255,157,.08),transparent 35%),radial-gradient(circle at 80% 85%,rgba(0,255,157,.06),transparent 40%),var(--bg);font-family:'Inter',sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:linear-gradient(rgba(0,255,157,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,157,.04) 1px,transparent 1px);background-size:50px 50px;animation:grid 25s linear infinite;z-index:-1}
+@keyframes grid{to{transform:translate(50px,50px)}}
+nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;z-index:100;border-bottom:1px solid var(--line);background:rgba(0,0,0,.8);backdrop-filter:blur(20px)}
+.logo{font-weight:800;letter-spacing:3px;font-size:18px;color:var(--green);text-shadow:0 0 15px var(--glow);text-decoration:none}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:.3s}
+.nav-links a:hover,.nav-links a.active{color:var(--green)}
+.btn{border:none;cursor:pointer;font-weight:600;border-radius:8px;padding:12px 22px;transition:.3s;font-size:14px;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--green),#00cc7a);box-shadow:0 0 25px var(--glow);color:#000}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 35px var(--glow)}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+.btn-logout{background:rgba(255,61,113,.1);border:1px solid rgba(255,61,113,.25);color:var(--red);padding:6px 14px;font-size:11px}
+.btn-logout:hover{background:rgba(255,61,113,.2);border-color:var(--red)}
+.container{max-width:1200px;margin:0 auto;padding:100px 6% 60px}
+.page-header{margin-bottom:30px}
+.page-header h1{font-size:28px;letter-spacing:-1px;margin-bottom:5px}
+.page-header p{color:var(--muted);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:25px;border-radius:14px;transition:.3s}
+.stat:hover{border-color:var(--green);transform:translateY(-3px)}
+.stat small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.stat strong{display:block;font-size:28px;margin-top:8px;color:var(--green)}
+.grid{display:grid;grid-template-columns:1.8fr 1fr;gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px}
+.panel-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.panel-title span{color:var(--muted);font-size:11px;font-family:"JetBrains Mono",monospace}
+.scan-box{min-height:280px;border:1px dashed rgba(0,255,157,.25);border-radius:12px;display:grid;place-items:center;text-align:center;padding:30px;background:rgba(0,255,157,.02)}
+.scan-icon{font-size:48px;color:var(--green);margin-bottom:15px;animation:rotate 8s linear infinite}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.progress-track{height:6px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden;margin:20px 0 10px}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--green),#00d4ff);transition:width .3s ease}
+.scan-status{color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:11px;min-height:16px}
+.file-list{display:grid;gap:8px;max-height:350px;overflow-y:auto}
+.file-item{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,255,157,.03);border-radius:8px;font-size:12px;border:1px solid var(--line);font-family:"JetBrains Mono",monospace}
+.download-card{background:rgba(0,255,157,.03);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;align-items:center;gap:15px;transition:.3s;margin-bottom:10px}
+.download-card:hover{border-color:var(--green);background:rgba(0,255,157,.06)}
+.dl-icon{width:44px;height:44px;border-radius:10px;background:rgba(0,255,157,.1);display:grid;place-items:center;font-size:20px;color:var(--green);flex-shrink:0}
+.dl-info h4{font-size:14px;margin-bottom:3px}
+.dl-info p{font-size:11px;color:var(--muted)}
+.locked-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(30px);z-index:200;display:grid;place-items:center;text-align:center;padding:20px}
+.locked-overlay.hidden{display:none}
+.user-pill{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--green);border:1px solid rgba(0,255,157,.2);padding:6px 14px;border-radius:99px}
+.user-pill img{width:20px;height:20px;border-radius:50%}
+.role-badge{font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.role-admin{background:rgba(0,255,157,.15);color:var(--green);border:1px solid rgba(0,255,157,.3)}
+.role-user{background:rgba(255,184,0,.1);color:var(--yellow);border:1px solid rgba(255,184,0,.2)}
+.plan-tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.plan-free{background:rgba(107,122,111,.2);color:var(--muted);border:1px solid rgba(107,122,111,.3)}
+.plan-basic{background:rgba(0,212,255,.1);color:#00d4ff;border:1px solid rgba(0,212,255,.25)}
+.plan-pro{background:rgba(0,255,157,.1);color:var(--green);border:1px solid rgba(0,255,157,.25)}
+.free-rav-notice{background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.15);border-radius:8px;padding:12px 15px;font-size:11px;color:var(--yellow);display:flex;align-items:center;gap:8px}
+footer{padding:50px 6%;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:11px;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">RAVEN</a>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="my-account.html" class="active">My Account</a>
+        <a href="admin.html">Admin</a>
+        <!-- ✅ Auth area - populated by JS -->
+        <div id="authArea"></div>
+    </div>
+</nav>
+
+<div class="locked-overlay" id="lockedOverlay">
+    <div>
+        <div style="font-size:64px;margin-bottom:20px;opacity:.3">🔒</div>
+        <h2 style="margin-bottom:10px">Account Not Activated</h2>
+        <p style="color:var(--muted);max-width:400px;margin:0 auto 25px;line-height:1.7" id="lockMsg">
+            Sign in and purchase a plan to access the Recovery Center.
+        </p>
+        <a href="index.html" class="btn btn-primary">Go to Plans</a>
+    </div>
+</div>
+
+<div class="container" id="mainContent" style="display:none">
+    <div class="page-header">
+        <h1>Recovery Center</h1>
+        <p>Welcome back, <span id="dispUser" style="color:var(--green)"></span> • <span id="dispPlanTag"></span></p>
+    </div>
+    <div class="stats">
+        <div class="stat"><small>Files Scanned</small><strong id="sFiles">0</strong></div>
+        <div class="stat"><small>Threats Found</small><strong style="color:var(--red)" id="sThreats">0</strong></div>
+        <div class="stat"><small>Recovered</small><strong id="sRecovered">0</strong></div>
+        <div class="stat"><small>License</small><strong>ACTIVE</strong></div>
+    </div>
+    <div class="grid">
+        <div class="panel">
+            <div class="panel-title"><h3>System Scanner</h3><span id="scanState">IDLE</span></div>
+            <div class="scan-box">
+                <div style="width:100%">
+                    <div class="scan-icon">⌬</div>
+                    <h2 id="scanTitle" style="font-size:22px;margin-bottom:8px">Ready to Scan</h2>
+                    <p style="color:var(--muted);font-size:13px">Analyze system for ransomware indicators</p>
+                    <div class="progress-track"><div class="progress-bar" id="progBar"></div></div>
+                    <div class="scan-status" id="scanStatus">Awaiting command...</div>
+                    <button class="btn btn-primary" id="scanBtn" onclick="startScan()" style="margin-top:20px;min-width:160px">Start Scan</button>
+                </div>
+            </div>
+        </div>
+        <div style="display:grid;gap:20px;align-content:start">
+            <div class="panel">
+                <div class="panel-title"><h3>Downloads</h3><span>LICENSED</span></div>
+                <!-- Program download - dynamic from Firestore -->
+                <div class="download-card">
+                    <div class="dl-icon">⬇</div>
+                    <div class="dl-info" style="flex:1">
+                        <h4>RAVEN Recovery Tool</h4>
+                        <p id="toolMeta">Loading version...</p>
+                    </div>
+                    <a id="toolDownloadBtn" class="btn btn-outline" style="padding:8px 14px;font-size:11px;text-decoration:none" href="#">Loading...</a>
+                </div>
+                <!-- ✅ RAV license download - only for Basic/Pro -->
+                <div class="download-card" id="ravCard">
+                    <div class="dl-icon">🔑</div>
+                    <div class="dl-info" style="flex:1"><h4>License File (.RAV)</h4><p>Your personal recovery rights file</p></div>
+                    <a id="ravDownloadBtn" class="btn btn-outline" style="padding:8px 14px;font-size:11px;text-decoration:none" href="#" download>Download</a>
+                </div>
+                <!-- ✅ Free plan notice - no RAV -->
+                <div class="free-rav-notice" id="freeRavNotice" style="display:none">
+                    <span>ℹ️</span> Free Trial does not include a .RAV license file. Upgrade to Basic or Pro for full access.
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><h3>Live Activity</h3><span>REAL-TIME</span></div>
+                <div class="file-list" id="actLog">
+                    <div class="file-item"><span>Engine initialized</span><span style="color:var(--green)">OK</span></div>
+                    <div class="file-item"><span>Signature DB loaded</span><span style="color:var(--green)">v2026.08</span></div>
+                    <div class="file-item"><span>License verified</span><span style="color:var(--green)">VALID</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>RAVEN RECOVERY PLATFORM © 2026</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyACA5xN8DE7Rcips935UKp0es3fznRDdB8",
+    authDomain: "nmnmmd-d81f8.firebaseapp.com",
+    projectId: "nmnmmd-d81f8",
+    storageBucket: "nmnmmd-d81f8.firebasestorage.app",
+    messagingSenderId: "673705420158",
+    appId: "1:673705420158:web:df5e8732e13a749b60bf2f"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ✅ Toast (same as index.html)
+function toast(msg, type = 'success') {
+    const t = document.createElement('div'); t.className = `toast ${type}`;
+    t.innerHTML = `<span>${type === 'success' ? '✓' : '⚠'}</span> ${msg}`;
+    // Create container if not exists
+    let container = document.getElementById('toasts');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toasts';
+        container.className = 'toast-container';
+        container.style.cssText = 'position:fixed;bottom:25px;right:25px;z-index:600;display:grid;gap:10px';
+        document.body.appendChild(container);
+    }
+    container.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
+}
+
+// ✅ Logout
+window.doLogout = async () => {
+    try {
+        await signOut(auth);
+        toast('Logged out successfully', 'warning');
+    } catch (e) {
+        console.error('Logout error:', e);
+    }
+};
+
+onAuthStateChanged(auth, async (user) => {
+    const authArea = document.getElementById('authArea');
+
+    if (!user) {
+        // ✅ Not signed in - show sign in button + lock message
+        authArea.innerHTML = `<a href="index.html" class="btn btn-outline" style="padding:8px 16px;font-size:12px">Sign In</a>`;
+        document.getElementById('lockMsg').textContent = 'Please sign in first to access your account.';
+        return;
+    }
+
+    // ✅ Signed in - get profile (username + role) from Firestore
+    let username = user.displayName || 'User';
+    let role = 'user';
+    try {
+        const userSnap = await getDoc(doc(db, 'users', user.uid));
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            username = userData.username || user.displayName || 'User';
+            role = userData.role || 'user';
+        }
+    } catch (e) { console.warn('Profile load error:', e); }
+
+    // ✅ Build nav with username, role badge, and logout
+    const roleClass = role === 'admin' ? 'role-admin' : 'role-user';
+    const roleLabel = role === 'admin' ? 'ADMIN' : 'USER';
+    authArea.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px">
+            <div class="user-pill">
+                ${user.photoURL ? `<img src="${user.photoURL}" alt="">` : ''}
+                <span>${username}</span>
+                <span class="role-badge ${roleClass}">${roleLabel}</span>
+            </div>
+            <button class="btn btn-logout" onclick="doLogout()">Logout</button>
+        </div>
+    `;
+
+    // ✅ Check subscription
+    try {
+        const q = query(collection(db, 'requests'), where('uid', '==', user.uid));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            document.getElementById('lockMsg').textContent = 'No orders found. Purchase a plan to get started.';
+            return;
+        }
+
+        const reqs = [];
+        snap.forEach(d => reqs.push({ id: d.id, ...d.data() }));
+        reqs.sort((a, b) => {
+            const timeA = a.createdAt?.seconds || 0;
+            const timeB = b.createdAt?.seconds || 0;
+            return timeB - timeA;
+        });
+
+        const approvedReq = reqs.find(r => r.status === 'approved');
+
+        if (approvedReq) {
+            // ✅ Show dashboard
+            document.getElementById('lockedOverlay').classList.add('hidden');
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('dispUser').textContent = approvedReq.displayName || username;
+
+            // ✅ Plan tag with color
+            const plan = approvedReq.plan;
+            const planClass = plan === 'pro' ? 'plan-pro' : plan === 'basic' ? 'plan-basic' : 'plan-free';
+            document.getElementById('dispPlanTag').innerHTML = `<span class="plan-tag ${planClass}">${plan.toUpperCase()}</span>`;
+
+            // ✅ RAV Download — only for Basic/Pro
+            const ravCard = document.getElementById('ravCard');
+            const freeNotice = document.getElementById('freeRavNotice');
+            const ravBtn = document.getElementById('ravDownloadBtn');
+
+            if (plan === 'free') {
+                // Free plan: hide RAV card, show notice
+                ravCard.style.display = 'none';
+                freeNotice.style.display = 'flex';
+            } else {
+                // Paid plan: show RAV card, hide notice
+                ravCard.style.display = 'flex';
+                freeNotice.style.display = 'none';
+
+                if (approvedReq.ravUrl) {
+                    ravBtn.href = approvedReq.ravUrl;
+                    ravBtn.textContent = 'Download .RAV';
+                    ravBtn.classList.remove('btn-outline');
+                    ravBtn.classList.add('btn-primary');
+                } else {
+                    ravBtn.textContent = 'Pending...';
+                    ravBtn.style.opacity = '.4';
+                    ravBtn.style.pointerEvents = 'none';
+                }
+            }
+
+            // ✅ Load global program version from Firestore
+            const toolBtn = document.getElementById('toolDownloadBtn');
+            const toolMeta = document.getElementById('toolMeta');
+            try {
+                const configSnap = await getDoc(doc(db, 'app_config', 'program'));
+                if (configSnap.exists() && configSnap.data().url) {
+                    const progData = configSnap.data();
+                    toolBtn.href = progData.url;
+                    toolBtn.textContent = `Download ${progData.version || 'Program'}`;
+                    toolBtn.classList.remove('btn-outline');
+                    toolBtn.classList.add('btn-primary');
+                    const sizeMB = progData.fileSize ? (progData.fileSize / 1024 / 1024).toFixed(1) + ' MB' : '';
+                    toolMeta.textContent = `${progData.version || 'Unknown'} • ${progData.fileName || '-'}${sizeMB ? ' • ' + sizeMB : ''}`;
+                } else {
+                    toolBtn.textContent = 'Not Available';
+                    toolBtn.style.opacity = '.4';
+                    toolBtn.style.pointerEvents = 'none';
+                    toolMeta.textContent = 'No version uploaded by admin yet';
+                }
+            } catch (e) {
+                console.error('Load program error:', e);
+                toolBtn.textContent = 'Error Loading';
+                toolBtn.style.opacity = '.4';
+                toolBtn.style.pointerEvents = 'none';
+                toolMeta.textContent = 'Failed to load version info';
+            }
+
+        } else {
+            const pendingReq = reqs.find(r => r.status === 'pending');
+            if (pendingReq) {
+                document.getElementById('lockMsg').textContent = 'Your request is pending admin review. Please wait for approval.';
+            } else {
+                document.getElementById('lockMsg').textContent = 'No approved subscription found. Purchase a plan to get started.';
+            }
+        }
+    } catch (e) {
+        console.error('Auth check error:', e);
+        document.getElementById('lockMsg').textContent = 'Error loading account data. Please refresh or contact support.';
+    }
+});
+
+// Scanner Simulation
+let scanning = false;
+window.startScan = function() {
+    if (scanning) return; scanning = true;
+    const btn = document.getElementById('scanBtn'), bar = document.getElementById('progBar');
+    const status = document.getElementById('scanStatus'), state = document.getElementById('scanState');
+    const title = document.getElementById('scanTitle');
+    btn.disabled = true; btn.textContent = 'Scanning...'; state.textContent = 'SCANNING'; state.style.color = 'var(--green)';
+    title.textContent = 'Analyzing System...';
+    let prog = 0, files = 0, threats = 0, recovered = 0;
+    const phases = [{e:15,l:'Enumerating file system...',r:50},{e:40,l:'Computing entropy signatures...',r:120},{e:65,l:'Matching YARA rules...',r:80},{e:85,l:'Verifying recovery points...',r:40},{e:100,l:'Finalizing report...',r:20}];
+    const samples = ['financial_report_2026.xlsx','project_backup.zip','family_photo.jpg','client_database.sql','server_snapshot.vhdx','invoice_march.pdf','passwords.kdbx'];
+    const iv = setInterval(() => {
+        const phase = phases.find(p => prog < p.e) || phases[phases.length - 1];
+        prog += Math.random() * 2.5 + .5; if (prog > 100) prog = 100;
+        files += Math.floor(Math.random() * phase.r) + 10;
+        if (prog > 35 && prog < 38 && threats === 0) { threats = 2; addLog('Encrypted archive detected', 'THREAT', true); addLog('Suspicious entropy: client_database.sql', 'THREAT', true); }
+        if (prog > 70 && prog < 73 && recovered === 0) { recovered = 2; addLog('Shadow copy restored: financial_report.xlsx', 'RECOVERED'); addLog('Backup verified: server_snapshot.vhdx', 'VERIFIED'); }
+        bar.style.width = prog + '%';
+        document.getElementById('sFiles').textContent = files.toLocaleString();
+        document.getElementById('sThreats').textContent = threats;
+        document.getElementById('sRecovered').textContent = recovered;
+        status.textContent = `${phase.l} ${Math.floor(prog)}%`;
+        if (Math.random() > .7 && prog < 95) { const f = samples[Math.floor(Math.random() * samples.length)]; addLog(`Scanned: ${f}`, 'OK'); }
+        if (prog >= 100) { clearInterval(iv); scanning = false; state.textContent = 'COMPLETE'; title.textContent = 'Scan Complete'; status.textContent = `Done. ${files.toLocaleString()} files processed.`; btn.disabled = false; btn.textContent = 'Scan Again'; addLog('Full system scan completed', 'DONE'); }
+    }, 200);
+};
+
+function addLog(name, st, isThreat) {
+    const list = document.getElementById('actLog'); const row = document.createElement('div');
+    row.className = 'file-item'; if (isThreat) row.style.borderColor = 'rgba(255,61,113,.3)';
+    row.innerHTML = `<span>${name}</span><span style="color:${isThreat ? 'var(--red)' : 'var(--green)'}">${st}</span>`;
+    list.prepend(row); while (list.children.length > 20) list.lastChild.remove();
+}
+</script>
+</body>
+</html>
